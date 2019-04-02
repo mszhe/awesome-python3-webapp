@@ -7,22 +7,22 @@ __author__ = 'Michael Liao'
 async web application.
 '''
 
+import asyncio
+import json
 import logging
-
-logging.basicConfig(level=logging.INFO)
-
-import asyncio, os, json, time
+import os
+import time
 from datetime import datetime
 
 from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
 
-from config import configs
-
 import orm
+from config import configs
 from coroweb import add_routes, add_static
-
 from handlers import cookie2user, COOKIE_NAME
+
+logging.basicConfig(level=logging.INFO)
 
 
 def init_jinja2(app, **kw):
@@ -123,11 +123,11 @@ def response_factory(app, handler):
                 resp = web.Response(body=app['__templating__'].get_template(template).render(**r).encode('utf-8'))
                 resp.content_type = 'text/html;charset=utf-8'
                 return resp
-        if isinstance(r, int) and t >= 100 and t < 600:
+        if isinstance(r, int) and 100 <= t < 600:
             return web.Response(t)
         if isinstance(r, tuple) and len(r) == 2:
             t, m = r
-            if isinstance(t, int) and t >= 100 and t < 600:
+            if isinstance(t, int) and 100 <= t < 600:
                 return web.Response(t, str(m))
         # default:
         resp = web.Response(body=str(r).encode('utf-8'))

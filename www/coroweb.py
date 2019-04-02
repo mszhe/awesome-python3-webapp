@@ -32,9 +32,9 @@ def get(path):
 
 
 def post(path):
-    '''
+    """
     Define decorator @post('/path')
-    '''
+    """
 
     def decorator(func):
         @functools.wraps(func)
